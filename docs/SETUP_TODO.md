@@ -7,9 +7,9 @@
 | 步驟 | 要做的事 | 交回給 Claude |
 |---|---|---|
 | 1 | 網站上線（GitHub Pages） | 不用 |
-| 2 | Google Cloud（登入與雲端硬碟） | 網頁用戶端的 **用戶端 ID** |
+| 2 | Google Cloud（登入與雲端硬碟） | 網頁用戶端的 **用戶端 ID**（✅ 2026-11-11 已收到，寫進 App 的 `lib/core/env.dart`） |
 | 3 | Neon 資料庫 | 不用（連線字串只貼到 Render） |
-| 4 | Render 後端 | 後端的網址 |
+| 4 | Render 後端 | 後端的網址（✅ 2026-11-11：`https://router-backend-3hl2.onrender.com`，日記 API 在 `/diary`） |
 | 5 | cron-job.org 保活 | 不用 |
 
 ---
@@ -144,7 +144,7 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 ## 5. cron-job.org 保活
 
 1. <https://console.cron-job.org/jobs> → **Create cronjob**
-2. URL：`https://router-backend.onrender.com/health`（換成你的網址）；排程：**每 10 分鐘**。
+2. URL：`https://router-backend-3hl2.onrender.com/health`；排程：**每 10 分鐘**。
 3. **Create**。`/health` 不碰資料庫，不會叫醒 Neon。
 
 ---

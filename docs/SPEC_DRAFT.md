@@ -198,6 +198,7 @@
 - **圖片**：存在手機 `files/images/<id>.jpg`；先轉正、去 EXIF，再縮成畫面高度的 1/3（太寬就以螢幕寬為準）。沒有日記或草稿用到的圖片，在 App 啟動、儲存、刪除時清掉（一分鐘內新加的不清，避免剛選的圖被刪）。
 - **Android 自動備份**只備份資料庫（`files/db/`），圖片不備份（25 MB 上限），之後靠「圖片存到雲端」保護。
 - **已做**（2026-11-11）：App 圖示（`tool/icon/make_icon.py`）、使用者條款與隱私權政策（草稿，`assets/texts/`）、App 設定的 App 版本與開放原始碼授權。
+- **Google 登入**（2026-11-11）：照 mama-fufood 與 google-auth skill。登入時用 Google 的 ID Token 跟後端（`POST /diary/api/v1/session`）換一張 App 通行證（無狀態、180 天、超過 30 天由每日檢查換新），帳號與通行證存在手機資料庫，重開 App 直接是登入狀態、**不呼叫 Google 的自動登入**。後端只收自己的通行證，不收 Google ID Token 當持續憑證。網頁用戶端 ID 與後端網址（`https://router-backend-3hl2.onrender.com/diary`）寫在 App 的 `lib/core/env.dart`（都不是秘密）。
 - **還沒做**（需要 Google 登入與後端）：登入、雲端同步、匯入/匯出、意見回饋與診斷記錄、App 設定裡的雲端／字體清單／檢查更新、字體設定頁與字體下載、後端 API。
 
 ## 12. 之後要討論
