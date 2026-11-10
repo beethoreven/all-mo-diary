@@ -1,0 +1,9 @@
+[submodule "all-mo-diary-app"]
+	path = all-mo-diary-app
+	url = https://github.com/beethoreven/all-mo-diary-app.git
+[submodule "all-mo-diary-web"]
+	path = all-mo-diary-web
+	url = https://github.com/beethoreven/all-mo-diary-web.git
+[submodule "router-backend"]
+	path = router-backend
+	url = https://github.com/beethoreven/router-backend.git

@@ -1,0 +1,4 @@
+# Pinned to the latest stable releases (checked on PyPI 2026-11-10). Python version is in .python-version.
+fonttools==4.68.0
+# Re-subroutinizes CFF fonts with AFDKO tx; ships its own tx binary.
+cffsubr==0.4.0

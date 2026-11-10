@@ -1,0 +1,5 @@
+# Shrunk font files are large binaries; they go to the GitHub Release, not into git.
+reduced_fonts/
+.venv/
+__pycache__/
+.DS_Store
