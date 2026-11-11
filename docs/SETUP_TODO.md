@@ -165,7 +165,7 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 - Token name：`general-fonts upload`
 - Expiration：選 **No expiration**（個人帳號的 repo 可以選；權限只限 general-fonts 的檔案，外洩最壞是字體下載失敗）。如果哪天懷疑金鑰外流，到 <https://github.com/settings/personal-access-tokens> 刪掉它，再照這步產生一把新的、換掉 Render 上的值即可（已上傳的字體不受影響）。
 - Repository access：**Only select repositories** → 只選 `general-fonts`
-- Permissions → Repository permissions → **Contents：Read and write**（其他都不用開）
+- Permissions：按 **Add permissions** → 在清單裡選 **Contents** → 把它右邊的權限從 Read-only 改成 **Read and write**。會自動多一個 Metadata（Read-only），那是必備的，留著。其他都不用加。（要先在上一行選好 Only select repositories，清單裡才會有 Contents。）
 - **Generate token** → 複製（只會顯示這一次）。
 
 **6-3 填到 Render**：Render 的 `router-backend` → **Environment** → 新增 `DIARY__FONTS_REPO`、`DIARY__GITHUB_TOKEN`（見 4-4）→ **Save, rebuild, and deploy**。
