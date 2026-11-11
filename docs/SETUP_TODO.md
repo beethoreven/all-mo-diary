@@ -163,7 +163,7 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 
 **6-2 產生金鑰**：<https://github.com/settings/personal-access-tokens/new>（Fine-grained token）
 - Token name：`general-fonts upload`
-- Expiration：選最長的。到期後後台上傳會顯示「GitHub 回應錯誤」，到時候照這步再產生一把、換掉 Render 的值即可（已上傳的字體不受影響）。
+- Expiration：選 **No expiration**（個人帳號的 repo 可以選；權限只限 general-fonts 的檔案，外洩最壞是字體下載失敗）。如果哪天懷疑金鑰外流，到 <https://github.com/settings/personal-access-tokens> 刪掉它，再照這步產生一把新的、換掉 Render 上的值即可（已上傳的字體不受影響）。
 - Repository access：**Only select repositories** → 只選 `general-fonts`
 - Permissions → Repository permissions → **Contents：Read and write**（其他都不用開）
 - **Generate token** → 複製（只會顯示這一次）。
