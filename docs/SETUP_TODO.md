@@ -128,7 +128,7 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 | `DIARY__SESSION_SECRET` | 終端機執行 `python3 -c "import secrets; print(secrets.token_hex(32))"` 產生的亂數 |
 | `DIARY__ALLOWED_ORIGINS` | `https://beethoreven.github.io` |
 | `DIARY__FIRST_ADMIN_EMAIL` | 第一位管理員的 Google 帳號 Email |
-| `DIARY__FONTS_REPO` | `beethoreven/all-mo-diary-fonts`（第 6 步建的 repo；可以晚點再加） |
+| `DIARY__FONTS_REPO` | `beethoreven/general-fonts`（第 6 步建的 repo；可以晚點再加） |
 | `DIARY__GITHUB_TOKEN` | 第 6 步產生的 GitHub 金鑰（可以晚點再加） |
 
 **4-5 Advanced**：Health Check Path 填 `/health`。
@@ -156,15 +156,15 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 字體檔放在一個公開 repo 的 GitHub Release（spec §9.2）。後台選檔後，後端用這把金鑰把檔案直接傳上去，App 再從那裡下載。
 
 **6-1 建 repo**：<https://github.com/new>
-- Repository name：`all-mo-diary-fonts`
+- Repository name：`general-fonts`（之後其他專案也可以共用）
 - **Public**
 - **勾選 Add a README file**（空的 repo 不能建 Release）
-- **Create repository**。Release 不用自己建，後端第一次上傳時會建一個叫 `fonts` 的。
+- **Create repository**。Release 不用自己建，後端第一次上傳時會建一個叫 `all-mo-diary` 的（每個專案各用自己的 Release，檔案不會混在一起）。
 
 **6-2 產生金鑰**：<https://github.com/settings/personal-access-tokens/new>（Fine-grained token）
-- Token name：`all-mo-diary-fonts upload`
+- Token name：`general-fonts upload`
 - Expiration：選最長的。到期後後台上傳會顯示「GitHub 回應錯誤」，到時候照這步再產生一把、換掉 Render 的值即可（已上傳的字體不受影響）。
-- Repository access：**Only select repositories** → 只選 `all-mo-diary-fonts`
+- Repository access：**Only select repositories** → 只選 `general-fonts`
 - Permissions → Repository permissions → **Contents：Read and write**（其他都不用開）
 - **Generate token** → 複製（只會顯示這一次）。
 
