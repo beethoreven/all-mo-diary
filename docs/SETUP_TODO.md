@@ -11,6 +11,8 @@
 | 3 | Neon 資料庫 | 不用（連線字串只貼到 Render） |
 | 4 | Render 後端 | 後端的網址（✅ 2026-11-11：`https://router-backend-3hl2.onrender.com`，日記 API 在 `/diary`） |
 | 5 | cron-job.org 保活 | 不用 |
+| 6 | 字體 repo 與 GitHub 金鑰（後台上傳字體用） | 不用（金鑰只貼到 Render） |
+| 7 | 第一次登入後台 | 有問題再說 |
 
 ---
 
@@ -126,6 +128,8 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 | `DIARY__SESSION_SECRET` | 終端機執行 `python3 -c "import secrets; print(secrets.token_hex(32))"` 產生的亂數 |
 | `DIARY__ALLOWED_ORIGINS` | `https://beethoreven.github.io` |
 | `DIARY__FIRST_ADMIN_EMAIL` | 第一位管理員的 Google 帳號 Email |
+| `DIARY__FONTS_REPO` | `beethoreven/all-mo-diary-fonts`（第 6 步建的 repo；可以晚點再加） |
+| `DIARY__GITHUB_TOKEN` | 第 6 步產生的 GitHub 金鑰（可以晚點再加） |
 
 **4-5 Advanced**：Health Check Path 填 `/health`。
 
@@ -147,12 +151,42 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 2. URL：`https://router-backend-3hl2.onrender.com/health`；排程：**每 10 分鐘**。
 3. **Create**。`/health` 不碰資料庫，不會叫醒 Neon。
 
+## 6. 字體 repo 與 GitHub 金鑰（後台上傳字體用）
+
+字體檔放在一個公開 repo 的 GitHub Release（spec §9.2）。後台選檔後，後端用這把金鑰把檔案直接傳上去，App 再從那裡下載。
+
+**6-1 建 repo**：<https://github.com/new>
+- Repository name：`all-mo-diary-fonts`
+- **Public**
+- **勾選 Add a README file**（空的 repo 不能建 Release）
+- **Create repository**。Release 不用自己建，後端第一次上傳時會建一個叫 `fonts` 的。
+
+**6-2 產生金鑰**：<https://github.com/settings/personal-access-tokens/new>（Fine-grained token）
+- Token name：`all-mo-diary-fonts upload`
+- Expiration：選最長的。到期後後台上傳會顯示「GitHub 回應錯誤」，到時候照這步再產生一把、換掉 Render 的值即可（已上傳的字體不受影響）。
+- Repository access：**Only select repositories** → 只選 `all-mo-diary-fonts`
+- Permissions → Repository permissions → **Contents：Read and write**（其他都不用開）
+- **Generate token** → 複製（只會顯示這一次）。
+
+**6-3 填到 Render**：Render 的 `router-backend` → **Environment** → 新增 `DIARY__FONTS_REPO`、`DIARY__GITHUB_TOKEN`（見 4-4）→ **Save, rebuild, and deploy**。
+
+**確認**：後台「字體」頁上方不再出現「後端還沒設定字體的 GitHub repo」。上傳一個 `.otf.gz`（用 meta repo 的 `tools/字體瘦身.command` 產生）→ 按「發布」→ App 設定 →「檢查更新」→ 字體設定頁出現這個字體。
+
+## 7. 第一次登入後台
+
+1. 打開 <https://beethoreven.github.io/all-mo-diary-web/> → 按 Google 登入按鈕，用 `DIARY__FIRST_ADMIN_EMAIL` 那個帳號。
+2. 登入後出現 **後台** 連結 → 進去。頁籤：字體、App 版本、意見回饋、管理員、系統。
+3. 其他管理員在「管理員」頁加。
+
+**常見問題**：
+- 登入後沒有「後台」連結：這個 Email 不是管理員（確認 `DIARY__FIRST_ADMIN_EMAIL` 拼字，改完要重新部署）。
+- 「後端連不上」：Render 免費方案睡著了，等 30 秒～1 分鐘重新整理（第 5 步設好之後就不太會發生）。
+
 ---
 
 ## 之後才需要
 
-- App 正式版的簽署金鑰（mama-fufood README Part G）：要裝到家人手機前。
-- `all-mo-diary-fonts` repo 與它的 GitHub 金鑰：字體功能恢復時。
+- App 正式版的簽署金鑰（mama-fufood README Part G）：要裝到家人手機前。目前的 APK 用除錯金鑰簽署。
 
 ## 已確認
 
