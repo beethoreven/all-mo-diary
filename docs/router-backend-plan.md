@@ -12,13 +12,13 @@ boo-king-king（`local_a0fef359-fdf5-40a1-a007-129841f86d2f` 回覆、`boo-king-
 ## 架構
 ```
 router-backend/
-  app.py           werkzeug DispatcherMiddleware：/diary → apps.diary, /fufood → apps.fufood ...
+  app.py           werkzeug DispatcherMiddleware：/all-mo-diary → apps.all_mo_diary, /mama-fufood → apps.mama_fufood ...
                    /health（不碰 DB，保活用）、/ready（逐一檢查每個 app）
   apps/<name>/     每個專案一個套件
   requirements.txt、.python-version   全部共用一份
 ```
 - 各專案 meta repo 的 backend submodule 改指向 router-backend；搬程式用 `git subtree` 保留紀錄。
-- 每個 app 自己的 DB（自己的連線字串），設定用前綴：`DIARY__DATABASE_URL`、`FUFOOD__GOOGLE_CLIENT_ID`、`FUFOOD__SESSION_SECRET`…
+- 每個 app 自己的 DB（自己的連線字串），設定用前綴：`ALL_MO_DIARY__DATABASE_URL`、`MAMA_FUFOOD__GOOGLE_CLIENT_ID`、`MAMA_FUFOOD__SESSION_SECRET`…
 
 ## 必須處理的問題
 1. **同名套件撞名**（最大）：各 backend 都有最上層 `db/`、`auth_utils/`、`config.py`、`app.py`；`sys.modules` 全行程共用，第二個 import 會默默拿到第一個的模組。每個 app 改成 `apps.<name>.*`，import 全部改。
@@ -46,13 +46,21 @@ router-backend/
 
 順序：all-mo-diary → mama-fufood、mama-stocker、fireless-war → 最後評估 zh-cn-to-tw。
 
-2026-11-11 使用者決定：三個專案**同時搬程式**（各在自己的 `apps/<套件>/`），**切換一次一個**，順序 fufood（要發 App 新版，最花時間）→ stocker → fireless-war；舊服務留到確認沒問題才關。fireless-war 的 demo 路由（不看白名單、任何 Google 帳號可用）**一起搬**，保留它自己的低額度。
+2026-11-11 使用者決定：三個專案**同時搬程式**（各在自己的 `apps/<套件>/`），**切換一次一個**，順序 mama-fufood（要發 App 新版，最花時間）→ mama-stocker → fireless-war；舊服務留到確認沒問題才關。fireless-war 的 demo 路由（不看白名單、任何 Google 帳號可用）**一起搬**，保留它自己的低額度。
 
 ## 共用程式（2026-11-11 決定）
-使用者要求：API 各專案不同，但跟 API 沒有直接關係的安全機制等，能共用就共用。盤點 diary、mama-fufood、mama-stocker、fireless-war 的 backend 之後：
+使用者要求：API 各專案不同，但跟 API 沒有直接關係的安全機制等，能共用就共用。盤點 all-mo-diary、mama-fufood、mama-stocker、fireless-war 的 backend 之後：
 
 - **共用（`router-backend/shared/`）**：Google ID Token 驗證、App 通行證、管理後台 session／管理員名單／`require_admin`、資料庫連線（每 app 與整台兩層上限）、請求大小與 gzip 上限、每日次數、拒絕統計、公用資料快取、Flask 錯誤格式與 CORS、時間與字數工具。diary 與 mama-fufood 原本是逐行複製的同一份程式，stocker 的連線層也是同一種做法。
-- **留在各 app**：只有一個 app 用到的，例如 LINE webhook 簽章、走勢圖網址簽章（stocker）、主持人白名單與 demo 路由（fireless-war）、各 app 的版本號規則。等第二個 app 也要用，再搬進 `shared/`。
+- **留在各 app**：只有一個 app 用到的，例如 LINE webhook 簽章、走勢圖網址簽章（mama-stocker）、主持人白名單與 demo 路由（fireless-war）、各 app 的版本號規則。等第二個 app 也要用，再搬進 `shared/`。
 - **相容性**：通行證與後台 session 的格式跟原本一模一樣，測試用各 app 原本程式產生的已知值釘住。mama-fufood 搬過來時，只要沿用 `mff1.`、原本的 purpose 字串、`sessions` 表名、`mama-fufood:schema` 鎖名，以及同一個 SESSION_SECRET，手機上的通行證與後台登入就不會失效。
-- **順手修掉的**：Google 公鑰抓取原本沿用 google-auth 預設的 120 秒逾時，改成 10 秒。「Google 連不上」原本被當成「憑證無效」（diary／fufood 回 401 會把人登出；fireless-war 則反過來，把錯的 issuer 當成「連不上」回 503），現在統一成：無效回 401，連不上回 503，不登出。
+- **順手修掉的**：Google 公鑰抓取原本沿用 google-auth 預設的 120 秒逾時，改成 10 秒。「Google 連不上」原本被當成「憑證無效」（all-mo-diary／mama-fufood 回 401 會把人登出；fireless-war 則反過來，把錯的 issuer 當成「連不上」回 503），現在統一成：無效回 401，連不上回 503，不登出。
 - **歸屬**：`shared/` 與 `router/` 只由主掌者改；其他 session 只改自己的 `apps/<套件>/`、`tests/<套件>/`，加 `MOUNTS`／`PER_APP_KEYS`／`requirements.txt` 各一行。
+
+## 2026-11-12 的決定
+- **切換改成三個一起切**（取代上面的「一次一個」）：使用者自己做，照一份統一清單（只留本機的 `docs/cutover-checklist.md`）。第一階段同一次做完，第二階段觀察後一起關舊服務、刪舊保活、拿掉舊 submodule。
+- **命名**：一律用專案的完整名稱，不縮寫（不能出現 fufood、stocker）。網址前綴與環境變數前綴：all-mo-diary（`/all-mo-diary`、`ALL_MO_DIARY__`，切換當天從 `/diary` 改名）、mama-fufood、mama-stocker、fireless-war。
+- **準則**：子專案（backend、app、web，包括 router-backend）的程式、註解、測試、README、commit 訊息只寫程式與技術理由；skill、CLAUDE.md、known-issue 編號、session ID、本機文件參照、討論紀錄、出處、家人都不寫。維護需要的筆記只放各專案的 meta repo。已發給七個專案（含 zh-cn-to-tw、group-judge、boo-king-king）。router-backend 的 CLAUDE.md 已移出 repo 並加進 `.gitignore`。
+- **已公開的歷史不改寫**，只保證之後的 commit 符合準則。
+- **舊的 backend repo**（mama-fufood-backend、mama-stocker-backend、fireless-war-backend）在第二階段設成私人，舊程式不另外清理。
+- **分工**：主掌者確認各專案符合準則後，各專案自己 commit、push；會停機或要使用者動手的事，先回報主掌者，由主掌者整理給使用者。
