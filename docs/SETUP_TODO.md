@@ -83,7 +83,18 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
   ```
   1A:BC:EE:34:06:13:0E:A6:7C:27:7A:8D:03:B6:4B:B1:FA:F8:40:C2
   ```
-- **建立**。Android 用戶端的 ID 不用交回（Google 用套件名稱加 SHA-1 對應）。之後有正式版金鑰時，再建一個正式版 SHA-1 的 Android 用戶端。
+- **建立**。Android 用戶端的 ID 不用交回（Google 用套件名稱加 SHA-1 對應）。
+
+③ 應用程式類型 **Android**（正式版金鑰，1.0.0 起的正式版用這把簽）
+- 名稱：`all-mo-diary-android-release`
+- 套件名稱：`tw.com.tutorarthur.allmodiary`
+- SHA-1 憑證指紋（正式版金鑰）：
+  ```
+  B3:4C:7C:5E:22:36:76:8D:93:09:C6:D5:A1:0A:45:74:36:D6:48:B0
+  ```
+- **建立**。沒建這個，正式版 App 的 Google 登入會失敗。
+
+正式版金鑰在 `~/Keys/all-mo-diary/`（`upload-keystore.jks` 與存密碼的 `key.properties`；App 的 `android/key.properties` 是同一份）。**整個資料夾要備份到別的地方**：金鑰遺失就無法再發新版，已安裝的手機只能移除重裝。
 
 ## 3. Neon 資料庫
 
