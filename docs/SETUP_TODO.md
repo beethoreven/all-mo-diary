@@ -107,7 +107,7 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 | Cloud provider | AWS |
 | Region | **AWS Asia Pacific 1 (Singapore)**（建好不能改，要和 Render 同區） |
 
-2. 專案首頁 → **Connect** → 打開 **Connection pooling** → 複製連線字串。確認它有 **`-pooler`**、**`ap-southeast-1`**、結尾 **`sslmode=require`**。
+2. 專案首頁 → **Connect** → 打開 **Connection pooling** → 用框裡的複製按鈕複製連線字串，**照原樣貼上，不要自己加或刪參數**。它應該有 **`-pooler`**、**`ap-southeast-1`**，問號後面有 **`sslmode=require`**；Neon 現在的字串最後還會接 `&channel_binding=require`，這是正常的。
 3. 這串含密碼：**只貼到第 4 步 Render 的環境變數**。
 
 ## 4. Render 後端（router-backend）
