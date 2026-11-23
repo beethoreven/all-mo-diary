@@ -25,9 +25,9 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 3. 等一兩分鐘，同一頁上方出現「Your site is live at …」。
 
 **確認**：下面三個網址都打得開（不是 404）：
-- <https://beethoreven.github.io/all-mo-diary-web/>
-- <https://beethoreven.github.io/all-mo-diary-web/legal.html?doc=privacy>
-- <https://beethoreven.github.io/all-mo-diary-web/legal.html?doc=terms>
+- <https://all-mo-diary.github.io/all-mo-diary-web/>
+- <https://all-mo-diary.github.io/all-mo-diary-web/legal.html?doc=privacy>
+- <https://all-mo-diary.github.io/all-mo-diary-web/legal.html?doc=terms>
 
 ## 2. Google Cloud（登入與雲端硬碟）
 
@@ -48,10 +48,10 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 | 欄位 | 值 |
 |---|---|
 | 應用程式標誌 | **不要上傳**（外部、正式版一上傳就要走品牌驗證） |
-| 應用程式首頁 | `https://beethoreven.github.io/all-mo-diary-web/` |
-| 應用程式隱私權政策連結 | `https://beethoreven.github.io/all-mo-diary-web/legal.html?doc=privacy` |
-| 應用程式服務條款連結 | `https://beethoreven.github.io/all-mo-diary-web/legal.html?doc=terms` |
-| 授權網域 | `beethoreven.github.io`（不是 `github.io`） |
+| 應用程式首頁 | `https://all-mo-diary.github.io/all-mo-diary-web/` |
+| 應用程式隱私權政策連結 | `https://all-mo-diary.github.io/all-mo-diary-web/legal.html?doc=privacy` |
+| 應用程式服務條款連結 | `https://all-mo-diary.github.io/all-mo-diary-web/legal.html?doc=terms` |
+| 授權網域 | `all-mo-diary.github.io`（不是 `github.io`） |
 | 開發人員聯絡資訊 | 你的 Email |
 
 拉到最下面 **儲存**。
@@ -73,7 +73,7 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 
 ① 應用程式類型 **網頁應用程式**
 - 名稱：`all-mo-diary-web`
-- 已授權的 JavaScript 來源 → 新增兩個：`https://beethoreven.github.io`、`http://localhost:8010`（只有網域、結尾不要斜線）
+- 已授權的 JavaScript 來源 → 新增兩個：`https://all-mo-diary.github.io`、`http://localhost:8010`（只有網域、結尾不要斜線）
 - 重新導向 URI：不用填
 - **建立** → 畫面顯示的 **用戶端 ID（Client ID）交回給 Claude**（不是秘密，會寫進 App 與後端設定）
 
@@ -130,17 +130,17 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 | Start Command | `gunicorn wsgi:app --workers 1 --threads 16 --timeout 120`（**一定要單一 worker**） |
 | Instance Type | **Free** |
 
-**4-4 環境變數**（Environment Variables，**名稱一定要有 `DIARY__` 前綴**，沒有前綴後端會拒絕啟動；值前後不要加引號）：
+**4-4 環境變數**（Environment Variables，**名稱一定要有 `ALL_MO_DIARY__` 前綴**，沒有前綴後端會拒絕啟動；值前後不要加引號）：
 
 | 名稱 | 值 |
 |---|---|
-| `DIARY__DATABASE_URL` | 第 3 步的 Neon 連線字串 |
-| `DIARY__GOOGLE_CLIENT_ID` | 2-7 ① 的網頁用戶端 ID |
-| `DIARY__SESSION_SECRET` | 終端機執行 `python3 -c "import secrets; print(secrets.token_hex(32))"` 產生的亂數 |
-| `DIARY__ALLOWED_ORIGINS` | `https://beethoreven.github.io` |
-| `DIARY__FIRST_ADMIN_EMAIL` | 第一位管理員的 Google 帳號 Email |
-| `DIARY__FONTS_REPO` | `beethoreven/general-fonts`（第 6 步建的 repo；可以晚點再加） |
-| `DIARY__GITHUB_TOKEN` | 第 6 步產生的 GitHub 金鑰（可以晚點再加） |
+| `ALL_MO_DIARY__DATABASE_URL` | 第 3 步的 Neon 連線字串 |
+| `ALL_MO_DIARY__GOOGLE_CLIENT_ID` | 2-7 ① 的網頁用戶端 ID |
+| `ALL_MO_DIARY__SESSION_SECRET` | 終端機執行 `python3 -c "import secrets; print(secrets.token_hex(32))"` 產生的亂數 |
+| `ALL_MO_DIARY__ALLOWED_ORIGINS` | `https://all-mo-diary.github.io` |
+| `ALL_MO_DIARY__FIRST_ADMIN_EMAIL` | 第一位管理員的 Google 帳號 Email |
+| `ALL_MO_DIARY__FONTS_REPO` | `beethoreven/general-fonts`（第 6 步建的 repo；可以晚點再加） |
+| `ALL_MO_DIARY__GITHUB_TOKEN` | 第 6 步產生的 GitHub 金鑰（可以晚點再加） |
 
 **4-5 Advanced**：Health Check Path 填 `/health`。
 
@@ -179,18 +179,18 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 - Permissions：按 **Add permissions** → 在清單裡選 **Contents** → 把它右邊的權限從 Read-only 改成 **Read and write**。會自動多一個 Metadata（Read-only），那是必備的，留著。其他都不用加。（要先在上一行選好 Only select repositories，清單裡才會有 Contents。）
 - **Generate token** → 複製（只會顯示這一次）。
 
-**6-3 填到 Render**：Render 的 `router-backend` → **Environment** → 新增 `DIARY__FONTS_REPO`、`DIARY__GITHUB_TOKEN`（見 4-4）→ **Save, rebuild, and deploy**。
+**6-3 填到 Render**：Render 的 `router-backend` → **Environment** → 新增 `ALL_MO_DIARY__FONTS_REPO`、`ALL_MO_DIARY__GITHUB_TOKEN`（見 4-4）→ **Save, rebuild, and deploy**。
 
 **確認**：後台「字體」頁上方不再出現「後端還沒設定字體的 GitHub repo」。上傳一個 `.otf.gz`（用 meta repo 的 `tools/字體瘦身.command` 產生）→ 按「發布」→ App 設定 →「檢查更新」→ 字體設定頁出現這個字體。
 
 ## 7. 第一次登入後台
 
-1. 打開 <https://beethoreven.github.io/all-mo-diary-web/> → 按 Google 登入按鈕，用 `DIARY__FIRST_ADMIN_EMAIL` 那個帳號。
+1. 打開 <https://all-mo-diary.github.io/all-mo-diary-web/> → 按 Google 登入按鈕，用 `ALL_MO_DIARY__FIRST_ADMIN_EMAIL` 那個帳號。
 2. 登入後出現 **後台** 連結 → 進去。頁籤：字體、App 版本、意見回饋、管理員、系統。
 3. 其他管理員在「管理員」頁加。
 
 **常見問題**：
-- 登入後沒有「後台」連結：這個 Email 不是管理員（確認 `DIARY__FIRST_ADMIN_EMAIL` 拼字，改完要重新部署）。
+- 登入後沒有「後台」連結：這個 Email 不是管理員（確認 `ALL_MO_DIARY__FIRST_ADMIN_EMAIL` 拼字，改完要重新部署）。
 - 「後端連不上」：Render 免費方案睡著了，等 30 秒～1 分鐘重新整理（第 5 步設好之後就不太會發生）。
 
 ---
