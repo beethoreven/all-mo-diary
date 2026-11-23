@@ -3,7 +3,7 @@
 	url = https://github.com/beethoreven/all-mo-diary-app.git
 [submodule "all-mo-diary-web"]
 	path = all-mo-diary-web
-	url = https://github.com/beethoreven/all-mo-diary-web.git
+	url = https://github.com/all-mo-diary/all-mo-diary-web.git
 [submodule "router-backend"]
 	path = router-backend
 	url = https://github.com/beethoreven/router-backend.git
