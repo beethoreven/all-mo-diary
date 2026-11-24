@@ -51,7 +51,7 @@ router-backend/
 ## 共用程式（2026-11-11 決定）
 使用者要求：API 各專案不同，但跟 API 沒有直接關係的安全機制等，能共用就共用。盤點 all-mo-diary、mama-fufood、mama-stocker、fireless-war 的 backend 之後：
 
-- **共用（`router-backend/shared/`）**：Google ID Token 驗證、App 通行證、管理後台 session／管理員名單／`require_admin`、資料庫連線（每 app 與整台兩層上限）、請求大小與 gzip 上限、每日次數、拒絕統計、公用資料快取、Flask 錯誤格式與 CORS、時間與字數工具。diary 與 mama-fufood 原本是逐行複製的同一份程式，stocker 的連線層也是同一種做法。
+- **共用（`router-backend/shared/`）**：Google ID Token 驗證、App 通行證、管理後台 session／管理員名單／`require_admin`、資料庫連線（每 app 與整台兩層上限）、請求大小與 gzip 上限、每日次數、拒絕統計、公用資料快取、Flask 錯誤格式與 CORS、時間與字數工具。all-mo-diary 與 mama-fufood 原本是逐行複製的同一份程式，mama-stocker 的連線層也是同一種做法。
 - **留在各 app**：只有一個 app 用到的，例如 LINE webhook 簽章、走勢圖網址簽章（mama-stocker）、主持人白名單與 demo 路由（fireless-war）、各 app 的版本號規則。等第二個 app 也要用，再搬進 `shared/`。
 - **相容性**：通行證與後台 session 的格式跟原本一模一樣，測試用各 app 原本程式產生的已知值釘住。mama-fufood 搬過來時，只要沿用 `mff1.`、原本的 purpose 字串、`sessions` 表名、`mama-fufood:schema` 鎖名，以及同一個 SESSION_SECRET，手機上的通行證與後台登入就不會失效。
 - **順手修掉的**：Google 公鑰抓取原本沿用 google-auth 預設的 120 秒逾時，改成 10 秒。「Google 連不上」原本被當成「憑證無效」（all-mo-diary／mama-fufood 回 401 會把人登出；fireless-war 則反過來，把錯的 issuer 當成「連不上」回 503），現在統一成：無效回 401，連不上回 503，不登出。

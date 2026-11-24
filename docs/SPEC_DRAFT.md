@@ -229,7 +229,7 @@
 - **圖片**：存在手機 `files/images/<id>.jpg`；先轉正、去 EXIF，再縮成畫面高度的 1/3（太寬就以螢幕寬為準）。沒有日記或草稿用到的圖片，在 App 啟動、儲存、刪除時清掉（一分鐘內新加的不清，避免剛選的圖被刪）。
 - **Android 自動備份**只備份資料庫（`files/db/`），圖片不備份（25 MB 上限），之後靠「圖片存到雲端」保護。
 - **已做**（2026-11-11）：App 圖示（`tool/icon/make_icon.py`）、使用者條款與隱私權政策（草稿，`assets/texts/`）、App 設定的 App 版本與開放原始碼授權。
-- **Google 登入**（2026-11-11）：照 mama-fufood 與 google-auth skill。登入時用 Google 的 ID Token 跟後端（`POST /diary/api/v1/session`）換一張 App 通行證（無狀態、180 天、超過 30 天由每日檢查換新），帳號與通行證存在手機資料庫，重開 App 直接是登入狀態、**不呼叫 Google 的自動登入**。後端只收自己的通行證，不收 Google ID Token 當持續憑證。網頁用戶端 ID 與後端網址（`https://router-backend-3hl2.onrender.com/diary`）寫在 App 的 `lib/core/env.dart`（都不是秘密）。
+- **Google 登入**（2026-11-11）：照 mama-fufood 與 google-auth skill。登入時用 Google 的 ID Token 跟後端（`POST /all-mo-diary/api/v1/session`）換一張 App 通行證（無狀態、180 天、超過 30 天由每日檢查換新），帳號與通行證存在手機資料庫，重開 App 直接是登入狀態、**不呼叫 Google 的自動登入**。後端只收自己的通行證，不收 Google ID Token 當持續憑證。網頁用戶端 ID 與後端網址（`https://router-backend-3hl2.onrender.com/diary`）寫在 App 的 `lib/core/env.dart`（都不是秘密）。
 - **雲端、後端、後台**（2026-11-11 第二批，全部照 mama-fufood 的做法）：
   - **雲端同步**（`services/sync_engine.dart`）：每篇日記在 `drive.appdata` 一個檔（`amd_diary_<id>.json`），使用者名稱一個檔（`amd_profile.json`）；比修改時間，新的贏；刪除留「已刪除」紀錄讓別支手機也刪。打開 App／回到 App 時同步（最多一分鐘一次），儲存、刪除後也同步；失敗會自動重試。換了 Google 帳號會擋下來，請使用者換回或關掉再打開。
   - **雲端圖片**：同一次同步先處理日記、再處理圖片；只有這支手機自己的圖片、而且已經沒有任何日記或草稿用到，才刪雲端那一份。第 8 節寫的「先標記、等所有版本都確認沒用到才刪」是為了兩支手機同時改同一篇，這個情況使用者決定先不處理，所以第一版沒有做延後刪除。關掉「圖片存到雲端」時先把圖片全部下載回手機才關（先下載到暫存檔、完整了才改名；切換開關的期間不會同時跑同步，否則同步會把剛下載回來的圖片又刪掉）。
@@ -237,7 +237,7 @@
   - **字體**：App 下載 `.otf.gz`、邊下載邊解壓、核對 SHA-256，存在 `files/fonts/<id>.otf`；用到才載入。缺字的判斷讀字體檔的 cmap 表（format 4/12）。
   - **意見回饋與診斷記錄**：照抄 mama-fufood（記錄檔遮掉使用者名稱與 Google 帳號名稱；沒網路先放待送清單，一天最多重試 5 次）。
   - **匯入/匯出**：整份加密（AES-256-GCM），存到使用者雲端硬碟「全心日記」資料夾，檔名 `全心日記_匯出_YYYYMMDD_HHMMSS.amd`；金鑰在 `drive.appdata`，只有同一個 Google 帳號能匯入。匯入時同一篇保留較新的版本；同一天手機已經有另一篇，問使用者保留哪一篇（選「用匯入的取代」時，刪舊的和寫入新的是同一個步驟）。同一時間只會有一個匯出或匯入：離開頁面工作會繼續，再打開頁面會顯示進行中；解密出來的暫存檔做完就刪。
-  - **後端**（router-backend 的 `apps/diary`）：`/api/v1/session`（換通行證）、`/api/v1/check`（每日檢查）、`/api/v1/feedback`；後台 API 在 `/api/admin/*`。字體上傳邊收邊轉傳到 GitHub Release（不整份放記憶體），同時算下載檔與解壓後字體的 SHA-256。
+  - **後端**（router-backend 的 `apps/all_mo_diary`）：`/api/v1/session`（換通行證）、`/api/v1/check`（每日檢查）、`/api/v1/feedback`；後台 API 在 `/api/admin/*`。字體上傳邊收邊轉傳到 GitHub Release（不整份放記憶體），同時算下載檔與解壓後字體的 SHA-256。
   - **後台**（all-mo-diary-web 的 `admin.html`）：字體（新增、改名、排序、授權、停用、上傳、發布）、App 版本（最低版本、強制更新原因、更新連結、公告）、意見回饋、管理員、系統（快取重新載入）。
   - **還沒用真的檔案驗證**：Render 上傳大檔（50 MB 以上）會不會被切斷。程式這邊：上傳上限 130 MB、gunicorn 是多執行緒 worker（timeout 不會砍掉還在傳的請求）、轉傳 GitHub 的讀取逾時 10 分鐘。
 

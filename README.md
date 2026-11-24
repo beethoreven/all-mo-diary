@@ -5,8 +5,8 @@
 | 路徑 | 內容 |
 |---|---|
 | `all-mo-diary-app/` | Flutter App（[repo](https://github.com/beethoreven/all-mo-diary-app)） |
-| `all-mo-diary-web/` | 網站：首頁、使用者條款、隱私權政策、管理後台 admin.html（[repo](https://github.com/beethoreven/all-mo-diary-web)，GitHub Pages） |
-| `router-backend/` | 共用後端，日記掛在 `/diary`（[repo](https://github.com/beethoreven/router-backend)） |
+| `all-mo-diary-web/` | 網站：首頁、使用者條款、隱私權政策、管理後台 admin.html（[repo](https://github.com/all-mo-diary/all-mo-diary-web)，GitHub Pages） |
+| `router-backend/` | 共用後端，日記掛在 `/all-mo-diary`（[repo](https://github.com/beethoreven/router-backend)） |
 | `docs/SPEC_DRAFT.md` | 規格 |
 | `docs/SETUP_TODO.md` | 上線前要做的外部設定（Google Cloud、Neon、Render、字體 repo、第一次登入後台） |
 | `docs/router-backend-plan.md` | 共用後端的評估與規劃 |

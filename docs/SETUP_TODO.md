@@ -9,7 +9,7 @@
 | 1 | 網站上線（GitHub Pages） | 不用 |
 | 2 | Google Cloud（登入與雲端硬碟） | 網頁用戶端的 **用戶端 ID**（✅ 2026-11-11 已收到，寫進 App 的 `lib/core/env.dart`） |
 | 3 | Neon 資料庫 | 不用（連線字串只貼到 Render） |
-| 4 | Render 後端 | 後端的網址（✅ 2026-11-11：`https://router-backend-3hl2.onrender.com`，日記 API 在 `/diary`） |
+| 4 | Render 後端 | 後端的網址（✅ 2026-11-11：`https://router-backend-3hl2.onrender.com`，日記 API 在 `/all-mo-diary`） |
 | 5 | cron-job.org 保活 | 不用 |
 | 6 | 字體 repo 與 GitHub 金鑰（後台上傳字體用） | 不用（金鑰只貼到 Render） |
 | 7 | 第一次登入後台 | 有問題再說 |
@@ -20,7 +20,7 @@
 
 Google 的品牌設定要填三個網址，Google 會實際打開它們，所以網站要先上線。程式已經推上去了。
 
-1. 打開 <https://github.com/beethoreven/all-mo-diary-web/settings/pages>
+1. 打開 <https://github.com/all-mo-diary/all-mo-diary-web/settings/pages>
 2. **Build and deployment → Source** 選 **Deploy from a branch**；**Branch** 選 `main`、資料夾 `/ (root)` → **Save**。
 3. 等一兩分鐘，同一頁上方出現「Your site is live at …」。
 
