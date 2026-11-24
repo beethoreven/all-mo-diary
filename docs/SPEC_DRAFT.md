@@ -229,7 +229,7 @@
 - **圖片**：存在手機 `files/images/<id>.jpg`；先轉正、去 EXIF，再縮成畫面高度的 1/3（太寬就以螢幕寬為準）。沒有日記或草稿用到的圖片，在 App 啟動、儲存、刪除時清掉（一分鐘內新加的不清，避免剛選的圖被刪）。
 - **Android 自動備份**只備份資料庫（`files/db/`），圖片不備份（25 MB 上限），之後靠「圖片存到雲端」保護。
 - **已做**（2026-11-11）：App 圖示（`tool/icon/make_icon.py`）、使用者條款與隱私權政策（草稿，`assets/texts/`）、App 設定的 App 版本與開放原始碼授權。
-- **Google 登入**（2026-11-11）：照 mama-fufood 與 google-auth skill。登入時用 Google 的 ID Token 跟後端（`POST /all-mo-diary/api/v1/session`）換一張 App 通行證（無狀態、180 天、超過 30 天由每日檢查換新），帳號與通行證存在手機資料庫，重開 App 直接是登入狀態、**不呼叫 Google 的自動登入**。後端只收自己的通行證，不收 Google ID Token 當持續憑證。網頁用戶端 ID 與後端網址（`https://router-backend-3hl2.onrender.com/diary`）寫在 App 的 `lib/core/env.dart`（都不是秘密）。
+- **Google 登入**（2026-11-11）：照 mama-fufood 與 google-auth skill。登入時用 Google 的 ID Token 跟後端（`POST /all-mo-diary/api/v1/session`）換一張 App 通行證（無狀態、180 天、超過 30 天由每日檢查換新），帳號與通行證存在手機資料庫，重開 App 直接是登入狀態、**不呼叫 Google 的自動登入**。後端只收自己的通行證，不收 Google ID Token 當持續憑證。網頁用戶端 ID 與後端網址（`https://router-backend-3hl2.onrender.com/all-mo-diary`）寫在 App 的 `lib/core/env.dart`（都不是秘密）。
 - **雲端、後端、後台**（2026-11-11 第二批，全部照 mama-fufood 的做法）：
   - **雲端同步**（`services/sync_engine.dart`）：每篇日記在 `drive.appdata` 一個檔（`amd_diary_<id>.json`），使用者名稱一個檔（`amd_profile.json`）；比修改時間，新的贏；刪除留「已刪除」紀錄讓別支手機也刪。打開 App／回到 App 時同步（最多一分鐘一次），儲存、刪除後也同步；失敗會自動重試。換了 Google 帳號會擋下來，請使用者換回或關掉再打開。
   - **雲端圖片**：同一次同步先處理日記、再處理圖片；只有這支手機自己的圖片、而且已經沒有任何日記或草稿用到，才刪雲端那一份。第 8 節寫的「先標記、等所有版本都確認沒用到才刪」是為了兩支手機同時改同一篇，這個情況使用者決定先不處理，所以第一版沒有做延後刪除。關掉「圖片存到雲端」時先把圖片全部下載回手機才關（先下載到暫存檔、完整了才改名；切換開關的期間不會同時跑同步，否則同步會把剛下載回來的圖片又刪掉）。

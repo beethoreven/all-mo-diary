@@ -148,7 +148,7 @@ Google 的品牌設定要填三個網址，Google 會實際打開它們，所以
 
 **確認**：
 - `https://router-backend.onrender.com/health` 顯示 `"ok": true`
-- `https://router-backend.onrender.com/ready` 顯示 `"diary": {"loaded": true, ...}`
+- `https://router-backend.onrender.com/ready` 顯示 `"all-mo-diary": {"loaded": true, ...}`
 
 **常見問題**：
 - 找不到 Python 3.15.2：Render 還沒有這一版。告訴 Claude，改成 Render 有的最新版並寫下原因。
